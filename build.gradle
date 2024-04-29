@@ -36,3 +36,28 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+node {
+    nodeModulesDir = file("$projectDir/front-end")
+    version = '18.3.0'
+    download = true
+}
+
+tasks.register('npmBuild', NpmTask) {
+    args = ['run', "build"]
+}
+
+tasks.register('copyFrontEnd', Copy) {
+    from "$projectDir/front-end/static"
+    into 'build/resources/main/static/.'
+}
+
+tasks.register('cleanFrontEnd', Delete) {
+    delete "$projectDir/front-end/static", "$projectDir/front-end/node_modules"
+}
+
+npmBuild.dependsOn npmInstall
+copyFrontEnd.dependsOn npmBuild
+compileJava.dependsOn copyFrontEnd
+
+clean.dependsOn cleanFrontEnd
