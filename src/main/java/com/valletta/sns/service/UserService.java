@@ -7,6 +7,7 @@ import com.valletta.sns.model.UserRole;
 import com.valletta.sns.model.entity.UserEntity;
 import com.valletta.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public UserDto join(String userName, String password) {
 
@@ -24,7 +26,7 @@ public class UserService {
 
         // 회원가입 진행 = user를 등록
 //        userRepository.save(new UserEntity());
-        UserEntity userEntity = userRepository.save(UserEntity.of(userName, password, UserRole.USER));
+        UserEntity userEntity = userRepository.save(UserEntity.of(userName, encoder.encode(password), UserRole.USER));
 
         return UserDto.fromEntity(userEntity);
     }
