@@ -9,8 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.valletta.sns.controller.request.UserJoinRequest;
 import com.valletta.sns.controller.request.UserLoginRequest;
+import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
-import com.valletta.sns.model.User;
+import com.valletta.sns.model.UserDto;
 import com.valletta.sns.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class UserControllerTest {
         String password = "password";
 
         // TODO: mocking
-        when(userService.join(userName, password)).thenReturn(mock(User.class));
+        when(userService.join(userName, password)).thenReturn(mock(UserDto.class));
 
         mockMvc.perform(post("/api/vi/users/join")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +55,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         // TODO: mocking
 
@@ -71,7 +72,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/vi/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +86,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/vi/users/login")
                 .contentType(MediaType.APPLICATION_JSON)

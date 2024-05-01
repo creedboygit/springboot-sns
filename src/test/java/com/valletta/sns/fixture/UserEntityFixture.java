@@ -14,5 +14,4 @@ public class UserEntityFixture {
             .password(password)
             .build();
     }
-
 }

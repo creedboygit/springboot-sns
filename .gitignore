@@ -229,3 +229,6 @@ gradle-app.setting
 .env
 
 node_modules
+postgres-data
+postgres-data/
+postgres-data/*
