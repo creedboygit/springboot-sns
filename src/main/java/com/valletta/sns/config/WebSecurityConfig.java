@@ -1,6 +1,7 @@
 package com.valletta.sns.config;
 
 import com.valletta.sns.config.filter.JwtTokenFilter;
+import com.valletta.sns.exception.CustomAuthenticationEntryPoint;
 import com.valletta.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,9 @@ public class WebSecurityConfig {
             .sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .httpBasic(Customizer.withDefaults())
+            .exceptionHandling((exceptionConfig) ->
+                exceptionConfig.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+            )
             .build();
     }
 }
