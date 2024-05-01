@@ -1,10 +1,12 @@
 package com.valletta.sns.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.fixture.UserEntityFixture;
 import com.valletta.sns.model.entity.UserEntity;
@@ -38,7 +40,7 @@ public class UserServiceTest {
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
 //        when(userRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
         when(encoder.encode(password)).thenReturn("encrypt_password");
-        when(userRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
+        when(userRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password));
 
         assertDoesNotThrow(() -> userService.join(userName, password));
     }
@@ -57,7 +59,8 @@ public class UserServiceTest {
         when(userRepository.save(any())).thenReturn(Optional.of(fixture));
 //        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(mock(UserEntity.class)));
 
-        assertThrows(SnsApplicationException.class, () -> userService.join(userName, password));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.join(userName, password));
+        assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
     }
 
     @Test
@@ -70,6 +73,7 @@ public class UserServiceTest {
 
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.matches(password, fixture.getPassword())).thenReturn(true);
 
         assertDoesNotThrow(() -> userService.login(userName, password));
     }
@@ -83,7 +87,8 @@ public class UserServiceTest {
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
 
-        assertThrows(SnsApplicationException.class, () -> userService.login(userName, password));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.login(userName, password));
+        assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
     }
 
     @Test
@@ -98,6 +103,7 @@ public class UserServiceTest {
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
 
-        assertThrows(SnsApplicationException.class, () -> userService.login(userName, wrongPassword));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.login(userName, wrongPassword));
+        assertEquals(ErrorCode.INVALID_PASSWORD, e.getErrorCode());
     }
 }

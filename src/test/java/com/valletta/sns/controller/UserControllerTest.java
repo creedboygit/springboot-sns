@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.View;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +34,8 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+    @Autowired
+    private View error;
 
     @Test
     public void 회원가입() throws Exception {
@@ -42,7 +45,7 @@ public class UserControllerTest {
         // TODO: mocking
         when(userService.join(userName, password)).thenReturn(mock(UserDto.class));
 
-        mockMvc.perform(post("/api/vi/users/join")
+        mockMvc.perform(post("/api/v1/users/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 // TODO: add request body
                 .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
@@ -55,16 +58,17 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME));
 
         // TODO: mocking
 
-        mockMvc.perform(post("/api/vi/users/join")
+        mockMvc.perform(post("/api/v1/users/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 // TODO: add request body
                 .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
             ).andDo(print())
-            .andExpect(status().isConflict());
+//            .andExpect(status().isConflict());
+            .andExpect(status().is(ErrorCode.DUPLICATED_USER_NAME.getStatus().value()));
     }
 
     @Test
@@ -72,9 +76,9 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
             ).andDo(print())
@@ -86,9 +90,9 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.INVALID_PASSWORD));
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
             ).andDo(print())
@@ -102,7 +106,7 @@ public class UserControllerTest {
 
         when(userService.login(userName, password)).thenReturn("test_token");
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
             ).andDo(print())
