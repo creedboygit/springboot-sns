@@ -1,5 +1,6 @@
 package com.valletta.sns.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,6 +26,20 @@ public class JwtTokenUtils {
             .expiration(new Date(System.currentTimeMillis() + expiredTimeMs))
             .signWith(getSingingKey(secretKey))
             .compact();
+    }
+
+    public static String getUserName(String token, String key) {
+        return extractClaims(token, key).get("userName", String.class);
+    }
+
+    public static boolean isExpired(String token, String key) {
+        Date expiration = extractClaims(token, key).getExpiration();
+        return expiration.before(new Date());
+    }
+
+    private static Claims extractClaims(String token, String key) {
+        return Jwts.parser().verifyWith(getSingingKey(key))
+            .build().parseSignedClaims(token).getPayload();
     }
 
     private static SecretKey getSingingKey(String secretKey) {
