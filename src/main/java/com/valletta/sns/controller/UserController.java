@@ -1,6 +1,8 @@
 package com.valletta.sns.controller;
 
 import com.valletta.sns.controller.request.UserJoinRequest;
+import com.valletta.sns.controller.request.UserLoginRequest;
+import com.valletta.sns.controller.response.UserLoginResponse;
 import com.valletta.sns.controller.response.Response;
 import com.valletta.sns.controller.response.UserJoinResponse;
 import com.valletta.sns.model.UserDto;
@@ -22,5 +24,11 @@ public class UserController {
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request) {
         UserDto userDto = userService.join(request.getUserName(), request.getPassword());
         return Response.success(UserJoinResponse.fromUserDto(userDto));
+    }
+
+    @PostMapping("/login")
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+        String token = userService.login(request.getUserName(), request.getPassword());
+        return Response.success(new UserLoginResponse(token));
     }
 }
