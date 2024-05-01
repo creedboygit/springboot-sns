@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -24,6 +25,9 @@ public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder encoder;
+
     @Test
     void 회원가입이_정상적으로_동작하는_경우() {
 
@@ -33,6 +37,7 @@ public class UserServiceTest {
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
 //        when(userRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
+        when(encoder.encode(password)).thenReturn("encrypt_password");
         when(userRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
 
         assertDoesNotThrow(() -> userService.join(userName, password));
@@ -48,6 +53,7 @@ public class UserServiceTest {
 
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.encode(password)).thenReturn("encrypt_password");
         when(userRepository.save(any())).thenReturn(Optional.of(fixture));
 //        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(mock(UserEntity.class)));
 
