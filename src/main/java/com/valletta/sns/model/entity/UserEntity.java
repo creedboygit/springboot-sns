@@ -64,10 +64,11 @@ public class UserEntity {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    public static UserEntity of(String userName, String password) {
+    public static UserEntity of(String userName, String password, UserRole userRole) {
         return UserEntity.builder()
             .userName(userName)
             .password(password)
+            .userRole(userRole)
             .build();
     }
 }

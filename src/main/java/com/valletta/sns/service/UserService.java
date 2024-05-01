@@ -3,6 +3,7 @@ package com.valletta.sns.service;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.UserRole;
 import com.valletta.sns.model.entity.UserEntity;
 import com.valletta.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserService {
 
         // 회원가입 진행 = user를 등록
 //        userRepository.save(new UserEntity());
-        UserEntity userEntity = userRepository.save(UserEntity.of(userName, password));
+        UserEntity userEntity = userRepository.save(UserEntity.of(userName, password, UserRole.USER));
 
         return UserDto.fromEntity(userEntity);
     }
