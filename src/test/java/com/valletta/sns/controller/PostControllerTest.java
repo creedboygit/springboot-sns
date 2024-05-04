@@ -3,6 +3,7 @@ package com.valletta.sns.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -13,6 +14,8 @@ import com.valletta.sns.controller.request.PostCreateRequest;
 import com.valletta.sns.controller.request.PostModifyRequest;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
+import com.valletta.sns.fixture.PostEntityFixture;
+import com.valletta.sns.model.PostDto;
 import com.valletta.sns.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,11 +75,14 @@ public class PostControllerTest {
         String title = "제목";
         String body = "내용";
 
+        when(postService.modify(eq(title), eq(body), any(), any()))
+            .thenReturn(PostDto.fromEntity(PostEntityFixture.get("userName", 1, 1)));
+
         mockMvc.perform(put("/api/v1/posts/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
             ).andDo(print())
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -103,7 +109,7 @@ public class PostControllerTest {
         // mocking
         doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title), eq(body), any(), eq(1));
 
-        mockMvc.perform(post("/api/v1/posts/1")
+        mockMvc.perform(put("/api/v1/posts/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
             ).andDo(print())
@@ -121,7 +127,7 @@ public class PostControllerTest {
         // mocking
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).modify(eq(title), eq(body), any(), eq(1));
 
-        mockMvc.perform(post("/api/v1/posts/1")
+        mockMvc.perform(put("/api/v1/posts/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
             ).andDo(print())
