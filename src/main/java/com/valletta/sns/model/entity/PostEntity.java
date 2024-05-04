@@ -20,6 +20,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
+//@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -68,5 +69,12 @@ public class PostEntity {
             .body(body)
             .user(userEntity)
             .build();
+    }
+
+//    @Builder
+    public void updatePost(String title, String body) {
+//        this.id = id;
+        this.title = title;
+        this.body = body;
     }
 }
