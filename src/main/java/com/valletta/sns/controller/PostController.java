@@ -2,6 +2,7 @@ package com.valletta.sns.controller;
 
 import com.valletta.sns.controller.request.PostCreateRequest;
 import com.valletta.sns.controller.request.PostModifyRequest;
+import com.valletta.sns.controller.response.PostResponse;
 import com.valletta.sns.controller.response.Response;
 import com.valletta.sns.model.PostDto;
 import com.valletta.sns.service.PostService;
@@ -29,10 +30,10 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public Response<Void> modify(@PathVariable Integer postId, @RequestBody PostModifyRequest request, Authentication authentication) {
+    public Response<PostResponse> modify(@PathVariable("postId") Integer postId, @RequestBody PostModifyRequest request, Authentication authentication) {
 
         PostDto postDto = postService.modify(request.getTitle(), request.getBody(), authentication.getName(), postId);
-        return Response.success();
+        return Response.success(PostResponse.fromPostDto(postDto));
     }
 
 }
