@@ -40,7 +40,7 @@ public class UserServiceTest {
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
 //        when(userRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
         when(encoder.encode(password)).thenReturn("encrypt_password");
-        when(userRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password));
+        when(userRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password, 1));
 
         assertDoesNotThrow(() -> userService.join(userName, password));
     }
@@ -51,7 +51,7 @@ public class UserServiceTest {
         String userName = "userName";
         String password = "password";
 
-        UserEntity fixture = UserEntityFixture.get(userName, password);
+        UserEntity fixture = UserEntityFixture.get(userName, password, 1);
 
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
@@ -69,7 +69,7 @@ public class UserServiceTest {
         String userName = "userName";
         String password = "password";
 
-        UserEntity fixture = UserEntityFixture.get(userName, password);
+        UserEntity fixture = UserEntityFixture.get(userName, password, 1);
 
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
@@ -98,7 +98,7 @@ public class UserServiceTest {
         String password = "password";
         String wrongPassword = "wrongPassword";
 
-        UserEntity fixture = UserEntityFixture.get(userName, password);
+        UserEntity fixture = UserEntityFixture.get(userName, password, 1);
 
         // mocking
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
