@@ -45,11 +45,11 @@ public class PostService {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
         }
 
-        PostEntity postSaveEntity = PostEntity.builder()
-            .title(title)
-            .body(body)
-            .build();
+        postEntity.updatePost(title, body);
+//        postEntity.setTitle(title);
+//        postEntity.setBody(body);
 
-        return PostDto.fromEntity(postRepository.save(postEntity));
+//        return PostDto.fromEntity(postRepository.save(postEntity));
+        return PostDto.fromEntity(postRepository.saveAndFlush(postEntity));
     }
 }
