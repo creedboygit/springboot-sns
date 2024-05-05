@@ -9,6 +9,8 @@ import com.valletta.sns.repository.PostRepository;
 import com.valletta.sns.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -69,5 +71,18 @@ public class PostService {
         }
 
         postRepository.delete(postEntity);
+    }
+
+    public Page<PostDto> list(Pageable pageable) {
+
+        return postRepository.findAll(pageable).map(PostDto::fromEntity);
+    }
+
+    public Page<PostDto> my(String userName, Pageable pageable) {
+
+        UserEntity userEntity = userRepository.findByUserName(userName).orElseThrow(() ->
+            new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+
+        return postRepository.findAllByUser(userEntity, pageable).map(PostDto::fromEntity);
     }
 }
