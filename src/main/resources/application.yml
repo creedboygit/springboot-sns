@@ -45,6 +45,26 @@ logging:
           descriptor:
             sql: trace
 
+springdoc:
+  swagger-ui:
+    groups-order: DESC
+    tags-sorter: alpha # 태그 정렬 기준
+    operations-sorter: method # alpha(알파벳 오름차순), method(HTTP메소드순)
+    disable-swagger-default-url: true
+    display-request-duration: true
+    defaultModelsExpandDepth: 2
+    defaultModelExpandDepth: 2
+    doc-expansion: none # tag, operation 펼치는 방식
+  api-docs:
+    path: /api-docs # html 문서 접속 경로
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  model-and-view-allowed: true
+  paths-to-match:
+    - /api/v1/**
+
 jwt:
   token.expiration-time-ms: 2592000000 # 30일
   secret-key: VlwE34yVB123Yt9V7zq57Tej4MnVUyzblYcfP122Qye3108f7
