@@ -41,6 +41,7 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Builder.Default
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private UserRole userRole = UserRole.USER;
