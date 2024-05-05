@@ -33,13 +33,23 @@ public class WebSecurityConfig {
         "/api/*/users/login",
     };
 
+    private static final String[] SWAGGER_LIST = {
+        "/swagger",
+        "/swagger-ui.html",
+        "/swagger-ui/**",
+        "/api-docs",
+        "/api-docs/**",
+        "/v3/api-docs/**"
+    };
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
 //        return (web) -> web.ignoring().requestMatchers("/예외처리하고 싶은 url", "/예외처리하고 싶은 url");
         return (web) -> web.ignoring()
             .requestMatchers("^(?!/api/).*")
 //            .requestMatchers("/api/**")
-            .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+//            .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+            .requestMatchers(SWAGGER_LIST)
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
