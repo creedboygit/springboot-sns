@@ -146,7 +146,7 @@ class PostServiceTest {
         when(userRepository.findByUserName("userName")).thenReturn(Optional.of(userEntity));
         when(postRepository.findById(postId)).thenReturn(Optional.of(postEntity));
 
-        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> postService.delete(userName, 1));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> postService.delete(userName, 2));
         assertEquals(ErrorCode.POST_NOT_FOUND, e.getErrorCode());
     }
 
@@ -182,7 +182,7 @@ class PostServiceTest {
         UserEntity userEntity = mock(UserEntity.class);
 
         when(userRepository.findByUserName(any())).thenReturn(Optional.of(userEntity));
-        when(postRepository.findAllByUser(any(), pageable)).thenReturn(Page.empty());
+        when(postRepository.findAllByUser(userEntity, pageable)).thenReturn(Page.empty());
 
         assertDoesNotThrow(() -> postService.my("", pageable));
     }

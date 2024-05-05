@@ -151,6 +151,8 @@ public class PostControllerTest {
     @WithMockUser
     void 포스트삭제시_로그인하지않은경우() throws Exception {
 
+        doThrow(new SnsApplicationException(ErrorCode.INVALID_TOKEN)).when(postService).delete(any(), any());
+
         mockMvc.perform(delete("/api/v1/posts/1")
                 .contentType(MediaType.APPLICATION_JSON)
             ).andDo(print())
