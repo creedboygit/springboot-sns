@@ -27,7 +27,8 @@ public class WebSecurityConfig {
 
     private static final String[] WHITE_LIST = {
         "/api/*/users/join",
-        "/api/*/users/login"
+        "/api/*/users/login",
+//        "/api/*/posts",
 //        "/**"
     };
 
