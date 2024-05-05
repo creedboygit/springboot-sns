@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserJoinRequest {
 
-    private String userName;
+    private String name;
     private String password;
 }
