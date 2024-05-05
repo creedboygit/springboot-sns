@@ -38,7 +38,7 @@ public class WebSecurityConfig {
 //        return (web) -> web.ignoring().requestMatchers("/예외처리하고 싶은 url", "/예외처리하고 싶은 url");
         return (web) -> web.ignoring()
             .requestMatchers("^(?!/api/).*")
-            .requestMatchers("/api/**")
+//            .requestMatchers("/api/**")
             .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
@@ -53,12 +53,13 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
 //                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
 //                .permitAll()
-                .requestMatchers(WHITE_LIST)
-                .permitAll()
-//                .requestMatchers("/api/**")
+                    .requestMatchers(WHITE_LIST)
+                    .permitAll()
+                    .requestMatchers("/api/**")
 //                .permitAll()
-                .anyRequest()
-                .authenticated()
+                    .authenticated()
+                    .anyRequest()
+                    .authenticated()
             )
             .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
             .sessionManagement((sessionManagement) ->
