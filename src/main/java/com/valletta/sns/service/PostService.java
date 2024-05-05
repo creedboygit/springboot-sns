@@ -3,8 +3,10 @@ package com.valletta.sns.service;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.entity.LikeEntity;
 import com.valletta.sns.model.entity.PostEntity;
 import com.valletta.sns.model.entity.UserEntity;
+import com.valletta.sns.repository.LikeRepository;
 import com.valletta.sns.repository.PostRepository;
 import com.valletta.sns.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -88,5 +91,20 @@ public class PostService {
 
     @Transactional
     public void like(Integer postId, String userName) {
+
+        // post exist
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() ->
+            new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not founded", postId)));
+
+        UserEntity userEntity = userRepository.findByUserName(userName).orElseThrow(() ->
+            new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+
+        // check liked -> throw
+        likeRepository.findByUserAndPost(userEntity, postEntity).ifPresent(it -> {
+            throw new SnsApplicationException(ErrorCode.ALREADY_LIKED, String.format("userName %s already liked post %d", userName, postId));
+        });
+
+        // like save
+        likeRepository.save(LikeEntity.of(userEntity, postEntity));
     }
 }
