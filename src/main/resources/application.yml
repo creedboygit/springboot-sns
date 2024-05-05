@@ -66,5 +66,6 @@ springdoc:
     - /api/v1/**
 
 jwt:
-  token.expiration-time-ms: 2592000000 # 30일
+  token:
+    expiration-time-ms: 2592000000 # 30일
   secret-key: VlwE34yVB123Yt9V7zq57Tej4MnVUyzblYcfP122Qye3108f7
