@@ -85,4 +85,8 @@ public class PostService {
 
         return postRepository.findAllByUser(userEntity, pageable).map(PostDto::fromEntity);
     }
+
+    @Transactional
+    public void like(Integer postId, String userName) {
+    }
 }
