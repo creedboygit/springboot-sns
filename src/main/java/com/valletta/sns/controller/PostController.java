@@ -1,5 +1,6 @@
 package com.valletta.sns.controller;
 
+import com.valletta.sns.controller.request.PostCommentRequest;
 import com.valletta.sns.controller.request.PostCreateRequest;
 import com.valletta.sns.controller.request.PostModifyRequest;
 import com.valletta.sns.controller.response.PostResponse;
@@ -70,6 +71,12 @@ public class PostController {
     public Response<Integer> likeCount(@PathVariable("postId") Integer postId, Authentication authentication) {
 
         return Response.success(postService.likeCount(postId));
+    }
 
+    @PostMapping("/{postId}/comment")
+    public Response<Void> comment(@PathVariable("postId") Integer postId, Authentication authentication, PostCommentRequest request) {
+
+        postService.comment(postId, authentication.getName(), request.getComment());
+        return Response.success();
     }
 }
