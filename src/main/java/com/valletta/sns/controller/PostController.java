@@ -3,9 +3,10 @@ package com.valletta.sns.controller;
 import com.valletta.sns.controller.request.PostCommentRequest;
 import com.valletta.sns.controller.request.PostCreateRequest;
 import com.valletta.sns.controller.request.PostModifyRequest;
+import com.valletta.sns.controller.response.CommentResponse;
 import com.valletta.sns.controller.response.PostResponse;
 import com.valletta.sns.controller.response.Response;
-import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.dto.PostDto;
 import com.valletta.sns.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -78,5 +79,11 @@ public class PostController {
 
         postService.comment(postId, authentication.getName(), request.getComment());
         return Response.success();
+    }
+
+    @GetMapping("/{postId}/comments")
+    public Response<Page<CommentResponse>> comment(@PathVariable("postId") Integer postId, Pageable pageable, Authentication authentication) {
+
+        return Response.success(postService.getComments(postId, pageable).map(CommentResponse::fromCommentDto));
     }
 }
