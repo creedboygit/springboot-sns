@@ -26,6 +26,7 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "\"comment\"", indexes = {
+    @Index(name = "user_id_idx", columnList = "user_id"),
     @Index(name = "post_id_idx", columnList = "post_id")
 })
 @SQLDelete(sql = "UPDATE \"comment\" SET deleted_at = NOW() where id = ?")

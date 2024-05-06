@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
@@ -24,7 +25,10 @@ import org.hibernate.annotations.SQLRestriction;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "\"like\"")
+@Table(name = "\"like\"", indexes = {
+    @Index(name = "user_id_idx", columnList = "user_id"),
+    @Index(name = "post_id_idx", columnList = "post_id")
+})
 @SQLDelete(sql = "UPDATE \"like\" SET deleted_at = NOW() where id = ?")
 @SQLRestriction("deleted_at is NULL")
 @Entity
