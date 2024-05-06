@@ -3,9 +3,11 @@ package com.valletta.sns.service;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.entity.CommentEntity;
 import com.valletta.sns.model.entity.LikeEntity;
 import com.valletta.sns.model.entity.PostEntity;
 import com.valletta.sns.model.entity.UserEntity;
+import com.valletta.sns.repository.CommentRepository;
 import com.valletta.sns.repository.LikeRepository;
 import com.valletta.sns.repository.PostRepository;
 import com.valletta.sns.repository.UserRepository;
@@ -22,6 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -108,6 +111,9 @@ public class PostService {
 
         PostEntity postEntity = getPostEntityOrException(postId);
         UserEntity userEntity = getUserEntityOrException(userName);
+
+        // comment save
+        commentRepository.save(CommentEntity.of(userEntity, postEntity, comment));
     }
 
     /**
