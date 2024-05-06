@@ -73,8 +73,8 @@ public class PostController {
         return Response.success(postService.likeCount(postId));
     }
 
-    @PostMapping("/{postId}/comment")
-    public Response<Void> comment(@PathVariable("postId") Integer postId, Authentication authentication, PostCommentRequest request) {
+    @PostMapping("/{postId}/comments")
+    public Response<Void> comment(@PathVariable("postId") Integer postId, Authentication authentication, @RequestBody PostCommentRequest request) {
 
         postService.comment(postId, authentication.getName(), request.getComment());
         return Response.success();
