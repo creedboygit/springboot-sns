@@ -2,7 +2,7 @@ package com.valletta.sns.service;
 
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
-import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.model.constant.UserRole;
 import com.valletta.sns.model.entity.UserEntity;
 import com.valletta.sns.repository.UserRepository;

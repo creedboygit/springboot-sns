@@ -11,7 +11,7 @@ import com.valletta.sns.controller.request.UserJoinRequest;
 import com.valletta.sns.controller.request.UserLoginRequest;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
-import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

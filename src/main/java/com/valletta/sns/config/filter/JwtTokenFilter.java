@@ -1,6 +1,6 @@
 package com.valletta.sns.config.filter;
 
-import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.service.UserService;
 import com.valletta.sns.util.JwtTokenUtils;
 import jakarta.servlet.FilterChain;

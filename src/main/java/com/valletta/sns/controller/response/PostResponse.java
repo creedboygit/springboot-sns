@@ -1,6 +1,6 @@
 package com.valletta.sns.controller.response;
 
-import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.dto.PostDto;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

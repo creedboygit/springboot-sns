@@ -18,7 +18,7 @@ import com.valletta.sns.controller.request.PostModifyRequest;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.fixture.PostEntityFixture;
-import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.dto.PostDto;
 import com.valletta.sns.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.valletta.sns.model;
+package com.valletta.sns.model.dto;
 
 import com.valletta.sns.model.constant.UserRole;
 import com.valletta.sns.model.entity.UserEntity;

@@ -1,6 +1,6 @@
 package com.valletta.sns.controller.response;
 
-import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

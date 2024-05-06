@@ -5,7 +5,7 @@ import com.valletta.sns.controller.request.UserLoginRequest;
 import com.valletta.sns.controller.response.UserLoginResponse;
 import com.valletta.sns.controller.response.Response;
 import com.valletta.sns.controller.response.UserJoinResponse;
-import com.valletta.sns.model.UserDto;
+import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
