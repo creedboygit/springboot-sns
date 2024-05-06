@@ -2,7 +2,8 @@ package com.valletta.sns.service;
 
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
-import com.valletta.sns.model.PostDto;
+import com.valletta.sns.model.dto.CommentDto;
+import com.valletta.sns.model.dto.PostDto;
 import com.valletta.sns.model.entity.CommentEntity;
 import com.valletta.sns.model.entity.LikeEntity;
 import com.valletta.sns.model.entity.PostEntity;
@@ -114,6 +115,13 @@ public class PostService {
 
         // comment save
         commentRepository.save(CommentEntity.of(userEntity, postEntity, comment));
+    }
+
+    public Page<CommentDto> getComments(Integer postId, Pageable pageable) {
+
+        PostEntity postEntity = getPostEntityOrException(postId);
+
+        return commentRepository.findAllByPost(postEntity, pageable).map(CommentDto::fromEntity);
     }
 
     /**
