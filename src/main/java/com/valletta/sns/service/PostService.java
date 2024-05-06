@@ -26,7 +26,6 @@ public class PostService {
     @Transactional
     public void create(String title, String body, String userName) {
 
-        // user find
         UserEntity userEntity = getUserEntityOrException(userName);
 
         // post save
@@ -36,10 +35,7 @@ public class PostService {
     @Transactional
     public PostDto modify(String title, String body, String userName, Integer postId) {
 
-        // user find
         UserEntity userEntity = getUserEntityOrException(userName);
-
-        // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
 
         // post permission
@@ -59,8 +55,6 @@ public class PostService {
     public void delete(String userName, Integer postId) {
 
         UserEntity userEntity = getUserEntityOrException(userName);
-
-        // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
 
         // post permission
@@ -86,7 +80,6 @@ public class PostService {
     @Transactional
     public void like(Integer postId, String userName) {
 
-        // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
         UserEntity userEntity = getUserEntityOrException(userName);
 
@@ -101,7 +94,6 @@ public class PostService {
 
     public int likeCount(Integer postId) {
 
-        // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
 
 //        List<LikeEntity> likeEntities = likeRepository.findAllByPost(postEntity);
@@ -118,12 +110,18 @@ public class PostService {
         UserEntity userEntity = getUserEntityOrException(userName);
     }
 
+    /**
+     * post exist
+     */
     private PostEntity getPostEntityOrException(Integer postId) {
 
         return postRepository.findById(postId).orElseThrow(() ->
             new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not founded", postId)));
     }
 
+    /**
+     * user exist
+     */
     private UserEntity getUserEntityOrException(String userName) {
 
         return userRepository.findByUserName(userName).orElseThrow(() ->
