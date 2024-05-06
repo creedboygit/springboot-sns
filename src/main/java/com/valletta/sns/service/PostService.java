@@ -10,6 +10,7 @@ import com.valletta.sns.repository.LikeRepository;
 import com.valletta.sns.repository.PostRepository;
 import com.valletta.sns.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -106,5 +107,15 @@ public class PostService {
 
         // like save
         likeRepository.save(LikeEntity.of(userEntity, postEntity));
+    }
+
+    public int likeCount(Integer postId) {
+
+        // post exist
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() ->
+            new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not founded", postId)));
+
+        List<LikeEntity> likeEntities = likeRepository.findAllByPost(postEntity);
+        return likeEntities.size();
     }
 }
