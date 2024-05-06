@@ -1,5 +1,6 @@
 package com.valletta.sns.model;
 
+import com.valletta.sns.model.constant.UserRole;
 import com.valletta.sns.model.entity.UserEntity;
 import java.sql.Timestamp;
 import java.util.Collection;

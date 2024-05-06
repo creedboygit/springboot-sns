@@ -1,7 +1,7 @@
 package com.valletta.sns.controller.response;
 
 import com.valletta.sns.model.UserDto;
-import com.valletta.sns.model.UserRole;
+import com.valletta.sns.model.constant.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 

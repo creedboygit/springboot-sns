@@ -1,4 +1,4 @@
-package com.valletta.sns.model;
+package com.valletta.sns.model.constant;
 
 public enum UserRole {
 

@@ -1,6 +1,6 @@
 package com.valletta.sns.model.entity;
 
-import com.valletta.sns.model.UserRole;
+import com.valletta.sns.model.constant.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
