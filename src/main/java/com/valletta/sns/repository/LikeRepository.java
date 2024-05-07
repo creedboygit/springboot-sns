@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface LikeRepository extends JpaRepository<LikeEntity, Integer> {
 
-//    LikeEntity findByUserAndPost(UserEntity user, PostEntity post);
     Optional<LikeEntity> findByUserAndPost(UserEntity user, PostEntity post);
 
     @Query("SELECT COUNT (*) FROM LikeEntity e where e.post = :postEntity")

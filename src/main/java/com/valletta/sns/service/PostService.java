@@ -48,10 +48,6 @@ public class PostService {
         }
 
         postEntity.updatePost(title, body);
-//        postEntity.setTitle(title);
-//        postEntity.setBody(body);
-
-//        return PostDto.fromEntity(postRepository.save(postEntity));
         return PostDto.fromEntity(postRepository.saveAndFlush(postEntity));
     }
 
@@ -100,11 +96,7 @@ public class PostService {
 
         PostEntity postEntity = getPostEntityOrException(postId);
 
-//        List<LikeEntity> likeEntities = likeRepository.findAllByPost(postEntity);
-//        return likeEntities.size();
-
         return likeRepository.countByPost(postEntity);
-//        return likeRepository.countByPost(postEntity.getId());
     }
 
     @Transactional

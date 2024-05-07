@@ -74,9 +74,7 @@ public class PostEntity {
             .build();
     }
 
-//    @Builder
     public void updatePost(String title, String body) {
-//        this.id = id;
         this.title = title;
         this.body = body;
     }
