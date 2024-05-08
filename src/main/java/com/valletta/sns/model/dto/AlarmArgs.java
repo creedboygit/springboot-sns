@@ -1,6 +1,5 @@
 package com.valletta.sns.model.dto;
 
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+//@Embeddable
 public class AlarmArgs {
 
     // 알람을 발생시킨 사람
