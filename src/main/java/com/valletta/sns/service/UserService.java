@@ -2,14 +2,16 @@ package com.valletta.sns.service;
 
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
-import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.model.constant.UserRole;
+import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.model.entity.UserEntity;
 import com.valletta.sns.repository.UserRepository;
 import com.valletta.sns.util.JwtTokenUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +60,11 @@ public class UserService {
 
         // 토큰 생성
         return JwtTokenUtils.generateToken(userName, secretKey, expirationTimeMs);
+    }
+
+    // TODO: alarm return
+    public Page<Void> alarmList(String userName, Pageable pageable) {
+
+        return Page.empty();
     }
 }
