@@ -3,8 +3,10 @@ package com.valletta.sns.service;
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.model.constant.UserRole;
+import com.valletta.sns.model.dto.AlarmDto;
 import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.model.entity.UserEntity;
+import com.valletta.sns.repository.AlarmRepository;
 import com.valletta.sns.repository.UserRepository;
 import com.valletta.sns.util.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Value("${jwt.secret-key}")
@@ -50,7 +53,7 @@ public class UserService {
     public String login(String userName, String password) {
 
         // 회원가입 여부 체크
-        UserEntity userEntity = userRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+        UserEntity userEntity = getUserEntity(userName);
 
         // 비밀번호 체크
 //        if (!userEntity.getPassword().equals(password)) {
@@ -62,9 +65,14 @@ public class UserService {
         return JwtTokenUtils.generateToken(userName, secretKey, expirationTimeMs);
     }
 
-    // TODO: alarm return
-    public Page<Void> alarmList(String userName, Pageable pageable) {
+    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
 
-        return Page.empty();
+        // 회원가입 여부 체크
+        UserEntity userEntity = getUserEntity(userName);
+        return alarmRepository.findAllByUser(userEntity, pageable).map(AlarmDto::fromEntity);
+    }
+
+    private UserEntity getUserEntity(String userName) {
+        return userRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
     }
 }
