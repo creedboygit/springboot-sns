@@ -14,7 +14,7 @@ import lombok.Getter;
 public class AlarmResponse {
 
     private Integer id;
-    private UserResponse userResponse;
+//    private UserResponse userResponse;
     private AlarmType alarmType;
     private AlarmArgs alarmArgs;
     private String alarmText;
@@ -27,7 +27,7 @@ public class AlarmResponse {
 
         return AlarmResponse.builder()
             .id(alarmDto.getId())
-            .userResponse(UserResponse.fromUserDto(alarmDto.getUserDto()))
+//            .userResponse(UserResponse.fromUserDto(alarmDto.getUserDto()))
             .alarmType(alarmDto.getAlarmType())
             .alarmArgs(alarmDto.getAlarmArgs())
             .alarmText(alarmDto.getAlarmType().getAlarmText())
