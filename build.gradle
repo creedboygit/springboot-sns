@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
     // type
-//    implementation 'com.vladbihalcea:hibernate-types-52:2.17.3'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.2.0'
 //    implementation 'io.hypersistence:hypersistence-utils-hibernate-52:3.6.0'
 //    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
 //    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
