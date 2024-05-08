@@ -2,12 +2,16 @@ package com.valletta.sns.service;
 
 import com.valletta.sns.exception.ErrorCode;
 import com.valletta.sns.exception.SnsApplicationException;
+import com.valletta.sns.model.constant.AlarmType;
+import com.valletta.sns.model.dto.AlarmArgs;
 import com.valletta.sns.model.dto.CommentDto;
 import com.valletta.sns.model.dto.PostDto;
+import com.valletta.sns.model.entity.AlarmEntity;
 import com.valletta.sns.model.entity.CommentEntity;
 import com.valletta.sns.model.entity.LikeEntity;
 import com.valletta.sns.model.entity.PostEntity;
 import com.valletta.sns.model.entity.UserEntity;
+import com.valletta.sns.repository.AlarmRepository;
 import com.valletta.sns.repository.CommentRepository;
 import com.valletta.sns.repository.LikeRepository;
 import com.valletta.sns.repository.PostRepository;
@@ -26,6 +30,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -90,6 +95,9 @@ public class PostService {
 
         // like save
         likeRepository.save(LikeEntity.of(userEntity, postEntity));
+
+        // alarm save
+        alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public int likeCount(Integer postId) {
@@ -107,6 +115,9 @@ public class PostService {
 
         // comment save
         commentRepository.save(CommentEntity.of(userEntity, postEntity, comment));
+
+        // alarm save
+        alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public Page<CommentDto> getComments(Integer postId, Pageable pageable) {
