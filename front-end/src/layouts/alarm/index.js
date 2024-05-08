@@ -76,6 +76,7 @@ function Alarm() {
     console.log('handleGetAlarm');
     axios({
       url: '/api/v1/users/alarm?size=5&sort=id&page=' + pageNum,
+      // url: '/api/v1/users/alarm?size=5&sort=id&page=0',
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -107,7 +108,7 @@ function Alarm() {
                 <Grid container>
                   <Grid item xs={12}>
                     <MDTypography fontWeight="bold" variant="body2">
-                      {alarm.text}
+                      {alarm.alarmText}
                     </MDTypography>
                   </Grid>
                   </Grid>
