@@ -65,11 +65,13 @@ public class UserService {
         return JwtTokenUtils.generateToken(userName, secretKey, expirationTimeMs);
     }
 
-    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
+//    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
+    public Page<AlarmDto> alarmList(Integer userId, Pageable pageable) {
 
         // 회원가입 여부 체크
-        UserEntity userEntity = getUserEntity(userName);
-        return alarmRepository.findAllByUser(userEntity, pageable).map(AlarmDto::fromEntity);
+//        UserEntity userEntity = getUserEntity(userName);
+//        return alarmRepository.findAllByUser(userEntity, pageable).map(AlarmDto::fromEntity);
+        return alarmRepository.findAllByUserId(userId, pageable).map(AlarmDto::fromEntity);
     }
 
     private UserEntity getUserEntity(String userName) {

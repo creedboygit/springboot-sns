@@ -6,8 +6,11 @@ import com.valletta.sns.controller.response.AlarmResponse;
 import com.valletta.sns.controller.response.UserLoginResponse;
 import com.valletta.sns.controller.response.Response;
 import com.valletta.sns.controller.response.UserJoinResponse;
+import com.valletta.sns.exception.ErrorCode;
+import com.valletta.sns.exception.SnsApplicationException;
 import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.service.UserService;
+import com.valletta.sns.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +42,9 @@ public class UserController {
 
     @GetMapping("/alarm")
     public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
-        return Response.success(userService.alarmList(authentication.getName(), pageable).map(AlarmResponse::fromAlarmDto));
+//        UserDto user = (UserDto) authentication.getPrincipal();
+//        return Response.success(userService.alarmList(authentication.getName(), pageable).map(AlarmResponse::fromAlarmDto));
+        UserDto user = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to User class failed"));
+        return Response.success(userService.alarmList(user.getId(), pageable).map(AlarmResponse::fromAlarmDto));
     }
 }
