@@ -50,6 +50,7 @@ public class AlarmEntity {
     @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
 
+    // PostgreSQL에서 jsonb 타입을 이용하기 위한 필드 설정
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private AlarmArgs alarmArgs;
