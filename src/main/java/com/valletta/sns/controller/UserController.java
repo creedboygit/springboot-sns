@@ -13,6 +13,7 @@ import com.valletta.sns.service.AlarmService;
 import com.valletta.sns.service.UserService;
 import com.valletta.sns.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
@@ -53,6 +55,7 @@ public class UserController {
 
     @GetMapping("/alarm/subscribe")
     public SseEmitter subscribe(Authentication authentication) {
+        log.info("subscribe");
         UserDto user = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), UserDto.class).orElseThrow(() -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to User class failed"));
         return alarmService.connectAlarm(user.getId());
     }
