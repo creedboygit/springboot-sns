@@ -113,7 +113,7 @@ function Feed() {
   };
 
   useEffect(() => {
-    handleGetPosts();
+    handleGetPosts(0);
   }, []);
 
   return (

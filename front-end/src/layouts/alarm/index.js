@@ -97,9 +97,12 @@ function Alarm() {
   };
 
   useEffect(() => {
-    handleGetAlarm();
+    handleGetAlarm(0);
 
-    eventSource = new EventSource("http://localhost:8080/api/v1/users/alarm/subscribe?token=" + localStorage.getItem('token'));
+    // eventSource = new EventSource("http://localhost:8080/api/v1/users/alarm/subscribe?token=" + localStorage.getItem('token'));
+    eventSource = new EventSource("/api/v1/users/alarm/subscribe?token=" + localStorage.getItem('token'));
+
+    console.log("token: " + localStorage.getItem('token'))
 
     setAlarmEvent(eventSource);
 
@@ -108,6 +111,7 @@ function Alarm() {
     });
 
     eventSource.addEventListener("alarm", function (event) {
+      console.log("alarm connected");
       console.log(event.data);
       handleGetAlarm();
     });
