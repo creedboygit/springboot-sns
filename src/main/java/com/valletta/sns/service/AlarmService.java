@@ -23,7 +23,10 @@ public class AlarmService {
             sseEmitter -> {
                 try {
                     log.info("alarm sended");
-                    sseEmitter.send(SseEmitter.event().id(alarmId.toString()).name(ALARM_NAME).data("new alarm"));
+                    sseEmitter.send(SseEmitter.event()
+                        .id(alarmId.toString())
+                        .name(ALARM_NAME)
+                        .data("new alarm"));
                 } catch (IOException e) {
                     emitterRepository.delete(userId);
                     throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR, "alarm connect error 1");
