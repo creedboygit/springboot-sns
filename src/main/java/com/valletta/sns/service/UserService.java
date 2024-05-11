@@ -7,6 +7,7 @@ import com.valletta.sns.model.dto.AlarmDto;
 import com.valletta.sns.model.dto.UserDto;
 import com.valletta.sns.model.entity.UserEntity;
 import com.valletta.sns.repository.AlarmRepository;
+import com.valletta.sns.repository.UserCacheRepository;
 import com.valletta.sns.repository.UserRepository;
 import com.valletta.sns.util.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
     private final BCryptPasswordEncoder encoder;
+    private final UserCacheRepository userCacheRepository;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -32,8 +34,11 @@ public class UserService {
     private long expirationTimeMs;
 
     public UserDto loadUserByUsername(String userName) {
-        return userRepository.findByUserName(userName).map(UserDto::fromEntity).orElseThrow(() ->
-            new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+
+        return userCacheRepository.getUser(userName).orElseGet(() ->
+            userRepository.findByUserName(userName).map(UserDto::fromEntity).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)))
+        );
     }
 
     @Transactional
@@ -49,15 +54,16 @@ public class UserService {
         return UserDto.fromEntity(userEntity);
     }
 
-    // TODO: implement
     public String login(String userName, String password) {
 
         // 회원가입 여부 체크
-        UserEntity userEntity = getUserEntity(userName);
+//        UserEntity userEntity = getUserEntity(userName);
+        UserDto userDto = loadUserByUsername(userName);
+        userCacheRepository.setUser(userDto);
 
         // 비밀번호 체크
 //        if (!userEntity.getPassword().equals(password)) {
-        if (!encoder.matches(password, userEntity.getPassword())) {
+        if (!encoder.matches(password, userDto.getPassword())) {
             throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
         }
 
@@ -65,7 +71,7 @@ public class UserService {
         return JwtTokenUtils.generateToken(userName, secretKey, expirationTimeMs);
     }
 
-//    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
+    //    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
     public Page<AlarmDto> alarmList(Integer userId, Pageable pageable) {
 
         // 회원가입 여부 체크
