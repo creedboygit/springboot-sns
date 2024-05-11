@@ -33,6 +33,7 @@ public class RedisConfig {
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<UserDto>(UserDto.class));
+//        redisTemplate.setValueSerializer(new StringRedisSerializer());
 
         return redisTemplate;
     }
