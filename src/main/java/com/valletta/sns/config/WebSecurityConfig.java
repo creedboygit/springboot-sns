@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -44,11 +45,9 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().requestMatchers("/예외처리하고 싶은 url", "/예외처리하고 싶은 url");
         return (web) -> web.ignoring()
             .requestMatchers("^(?!/api/).*")
-//            .requestMatchers("/api/**")
-//            .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+            .requestMatchers(HttpMethod.POST, WHITE_LIST)
             .requestMatchers(SWAGGER_LIST)
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
@@ -61,15 +60,10 @@ public class WebSecurityConfig {
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable) // RestAPI는 UI를 사용하지 않기 때문에, 기본설정을 비활성화
             .authorizeHttpRequests(auth -> auth
-//                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
-//                .permitAll()
-                    .requestMatchers(WHITE_LIST)
-                    .permitAll()
-                    .requestMatchers("/api/**")
-//                .permitAll()
-                    .authenticated()
-                    .anyRequest()
-                    .authenticated()
+                .requestMatchers("/api/**")
+                .authenticated()
+                .anyRequest()
+                .authenticated()
             )
             .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
             .sessionManagement((sessionManagement) ->

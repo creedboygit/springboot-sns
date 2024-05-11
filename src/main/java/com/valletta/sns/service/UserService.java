@@ -57,12 +57,10 @@ public class UserService {
     public String login(String userName, String password) {
 
         // 회원가입 여부 체크
-//        UserEntity userEntity = getUserEntity(userName);
         UserDto userDto = loadUserByUsername(userName);
         userCacheRepository.setUser(userDto);
 
         // 비밀번호 체크
-//        if (!userEntity.getPassword().equals(password)) {
         if (!encoder.matches(password, userDto.getPassword())) {
             throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
         }
@@ -71,12 +69,8 @@ public class UserService {
         return JwtTokenUtils.generateToken(userName, secretKey, expirationTimeMs);
     }
 
-    //    public Page<AlarmDto> alarmList(String userName, Pageable pageable) {
     public Page<AlarmDto> alarmList(Integer userId, Pageable pageable) {
 
-        // 회원가입 여부 체크
-//        UserEntity userEntity = getUserEntity(userName);
-//        return alarmRepository.findAllByUser(userEntity, pageable).map(AlarmDto::fromEntity);
         return alarmRepository.findAllByUserId(userId, pageable).map(AlarmDto::fromEntity);
     }
 
