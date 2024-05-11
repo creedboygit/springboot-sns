@@ -2,6 +2,7 @@ package com.valletta.sns.repository;
 
 import com.valletta.sns.model.dto.UserDto;
 import java.time.Duration;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,13 +23,13 @@ public class UserCacheRepository {
         userRedisTemplate.opsForValue().set(getKey(user.getUsername()), user, USER_CACHE_TTL);
     }
 
-    public UserDto getUser(String userName) {
+    public Optional<UserDto> getUser(String userName) {
         String key = getKey(userName);
 
         UserDto user = userRedisTemplate.opsForValue().get(getKey(userName));
         log.info("Get data from Redis {}:{}", key, user);
 
-        return user;
+        return Optional.ofNullable(user);
     }
 
     private String getKey(String userName) {
