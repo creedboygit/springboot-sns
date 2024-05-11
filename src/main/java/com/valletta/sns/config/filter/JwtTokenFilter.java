@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,20 +27,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final UserService userService;
 
+    private static final List<String> TOKEN_IN_PARAM_URLS = List.of("/api/v1/users/alarm/subscribe");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        final String token;
+
         // get header
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        if (header == null || !header.startsWith("Bearer ")) {
-            log.error("Error occurs while getting header. header is null or invalid {}", request.getRequestURL());
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         try {
-            final String token = header.split(" ")[1].trim();
+            if (TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
+                token = request.getQueryString().split("=")[1].trim();
+            } else {
+                final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+                if (header == null || !header.startsWith("Bearer ")) {
+                    log.error("Error occurs while getting header. header is null or invalid {}", request.getRequestURL());
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                token = header.split(" ")[1].trim();
+            }
 
             if (JwtTokenUtils.isExpired(token, key)) {
                 log.error("Key is Expired");
@@ -53,7 +62,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDto, null, userDto.getAuthorities()
-//                userDto, null, List.of(new SimpleGrantedAuthority(userDto.getUserRole().toString()))
             );
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
