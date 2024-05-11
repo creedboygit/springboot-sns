@@ -22,10 +22,11 @@ public class AlarmService {
         emitterRepository.get(userId).ifPresentOrElse(
             sseEmitter -> {
                 try {
+                    log.info("alarm sended");
                     sseEmitter.send(SseEmitter.event().id(alarmId.toString()).name(ALARM_NAME).data("new alarm"));
                 } catch (IOException e) {
                     emitterRepository.delete(userId);
-                    throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR);
+                    throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR, "alarm connect error 1");
                 }
             },
             () -> log.info("No emitter founded")
@@ -40,9 +41,13 @@ public class AlarmService {
         sseEmitter.onTimeout(() -> emitterRepository.delete(userId));
 
         try {
-            sseEmitter.send(SseEmitter.event().id("id").name(ALARM_NAME).data("connect completed"));
+            log.info("connect send");
+            sseEmitter.send(SseEmitter.event()
+                .id("id")
+                .name("connect")
+                .data("connect completed"));
         } catch (IOException e) {
-            throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR);
+            throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR, "alarm connect error 2");
         }
 
         return sseEmitter;
