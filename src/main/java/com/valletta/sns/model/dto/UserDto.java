@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserDto implements UserDetails {
 
     private Integer id;
-    private String userName;
+    private String username;
     private String password;
     private UserRole userRole;
     private Timestamp registeredAt;
@@ -27,7 +27,7 @@ public class UserDto implements UserDetails {
     public static UserDto fromEntity(UserEntity userEntity) {
         return UserDto.builder()
             .id(userEntity.getId())
-            .userName(userEntity.getUserName())
+            .username(userEntity.getUserName())
             .password(userEntity.getPassword())
             .userRole(userEntity.getUserRole())
             .registeredAt(userEntity.getRegisteredAt())
@@ -39,11 +39,6 @@ public class UserDto implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.getUserRole().toString()));
-    }
-
-    @Override
-    public String getUsername() {
-        return this.userName;
     }
 
     @Override
