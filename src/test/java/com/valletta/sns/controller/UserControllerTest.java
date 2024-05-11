@@ -122,7 +122,7 @@ public class UserControllerTest {
 
         when(userService.alarmList(any(), any())).thenReturn(Page.empty());
 
-        mockMvc.perform(get("/api/v1/users/alarms")
+        mockMvc.perform(get("/api/v1/users/alarm")
                 .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk());
@@ -134,7 +134,7 @@ public class UserControllerTest {
 
         when(userService.alarmList(any(), any())).thenReturn(Page.empty());
 
-        mockMvc.perform(get("/api/v1/users/alarms")
+        mockMvc.perform(get("/api/v1/users/alarm")
                 .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isUnauthorized());
