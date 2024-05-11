@@ -1,18 +1,23 @@
 package com.valletta.sns.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.valletta.sns.model.constant.UserRole;
 import com.valletta.sns.model.entity.UserEntity;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// TODO: implement
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+//@JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 public class UserDto implements UserDetails {
 
@@ -37,26 +42,31 @@ public class UserDto implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.getUserRole().toString()));
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return this.deletedAt == null;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return this.deletedAt == null;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return this.deletedAt == null;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return this.deletedAt == null;
     }
