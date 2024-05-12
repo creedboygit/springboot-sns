@@ -6,11 +6,12 @@ import com.valletta.sns.model.constant.AlarmType;
 import com.valletta.sns.model.dto.AlarmArgs;
 import com.valletta.sns.model.dto.CommentDto;
 import com.valletta.sns.model.dto.PostDto;
-import com.valletta.sns.model.entity.AlarmEntity;
 import com.valletta.sns.model.entity.CommentEntity;
 import com.valletta.sns.model.entity.LikeEntity;
 import com.valletta.sns.model.entity.PostEntity;
 import com.valletta.sns.model.entity.UserEntity;
+import com.valletta.sns.model.event.AlarmEvent;
+import com.valletta.sns.producer.AlarmProducer;
 import com.valletta.sns.repository.AlarmRepository;
 import com.valletta.sns.repository.CommentRepository;
 import com.valletta.sns.repository.LikeRepository;
@@ -32,6 +33,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final AlarmRepository alarmRepository;
     private final AlarmService alarmService;
+    private final AlarmProducer alarmProducer;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -100,10 +102,11 @@ public class PostService {
         likeRepository.save(LikeEntity.of(userEntity, postEntity));
 
         // alarm save
-        AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
+//        AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
 
         // alarm send to user
-        alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+//        alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+        alarmProducer.send(new AlarmEvent(postEntity.getUser().getId(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public long likeCount(Integer postId) {
@@ -123,10 +126,11 @@ public class PostService {
         commentRepository.save(CommentEntity.of(userEntity, postEntity, comment));
 
         // alarm save
-        AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
+//        AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
 
         // alarm send to user
-        alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+//        alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+        alarmProducer.send(new AlarmEvent(postEntity.getUser().getId(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
     }
 
     public Page<CommentDto> getComments(Integer postId, Pageable pageable) {
