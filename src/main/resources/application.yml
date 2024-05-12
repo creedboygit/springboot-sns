@@ -28,13 +28,17 @@ spring:
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#      properties.spring.json.trusted.packages: "*"
+      properties.spring.json.trusted.packages: "*"
     listener:
       ack-mode: manual
     producer:
       bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topic:
+      alarm: alarm
+#    template:
+#      default-topic: alarm
 #      properties.enable.idempotence: false
 
 logging:
